@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { LucideIcon, ChevronRight } from 'lucide-react';
 
 interface CategoryItem {
@@ -19,10 +19,24 @@ interface NavDropdownProps {
 
 export default function NavDropdown({ items, onMouseEnter, onMouseLeave }: NavDropdownProps) {
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
+  const categoryTimeoutRef = useRef<NodeJS.Timeout>();
+
+  const handleCategoryEnter = (label: string) => {
+    if (categoryTimeoutRef.current) {
+      clearTimeout(categoryTimeoutRef.current);
+    }
+    setActiveCategory(label);
+  };
+
+  const handleCategoryLeave = () => {
+    categoryTimeoutRef.current = setTimeout(() => {
+      setActiveCategory(null);
+    }, 300);
+  };
 
   return (
     <div
-      className="absolute left-0 w-64 mt-2 bg-white rounded-xl shadow-lg py-2 ring-1 ring-black ring-opacity-5"
+      className="absolute left-0 w-64 mt-2 bg-white rounded-xl shadow-lg py-2 ring-1 ring-black ring-opacity-5 transition-opacity duration-300"
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
@@ -30,11 +44,12 @@ export default function NavDropdown({ items, onMouseEnter, onMouseLeave }: NavDr
         <div
           key={item.label}
           className="relative"
-          onMouseEnter={() => setActiveCategory(item.label)}
+          onMouseEnter={() => handleCategoryEnter(item.label)}
+          onMouseLeave={handleCategoryLeave}
         >
           <a
             href={`#${item.label.toLowerCase().replace(' ', '-')}`}
-            className="flex items-center px-4 py-3 hover:bg-gray-50"
+            className="flex items-center px-4 py-3 hover:bg-gray-50 transition-colors duration-200"
           >
             <div className="flex-shrink-0">
               <item.icon className="w-5 h-5 text-emerald-600" />
@@ -48,12 +63,16 @@ export default function NavDropdown({ items, onMouseEnter, onMouseLeave }: NavDr
             )}
           </a>
           {item.categories && activeCategory === item.label && (
-            <div className="absolute left-full top-0 w-56 ml-2 bg-white rounded-xl shadow-lg py-2 ring-1 ring-black ring-opacity-5">
+            <div 
+              className="absolute left-full top-0 w-56 ml-2 bg-white rounded-xl shadow-lg py-2 ring-1 ring-black ring-opacity-5"
+              onMouseEnter={() => handleCategoryEnter(item.label)}
+              onMouseLeave={handleCategoryLeave}
+            >
               {item.categories.map((category) => (
                 <a
                   key={category.name}
                   href={`#${category.name.toLowerCase().replace(' ', '-')}`}
-                  className="flex items-center justify-between px-4 py-2 hover:bg-gray-50"
+                  className="flex items-center justify-between px-4 py-2 hover:bg-gray-50 transition-colors duration-200"
                 >
                   <span className="text-sm text-gray-900">{category.name}</span>
                   {category.badge && (

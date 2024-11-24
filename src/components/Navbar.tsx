@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Menu, Search, User, Bell, ChevronDown, MapPin, TrendingUp, Grid } from 'lucide-react';
 import NavDropdown from './NavDropdown';
@@ -34,6 +34,20 @@ const exploreItems = [
 export default function Navbar() {
   const [isExploreOpen, setIsExploreOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const timeoutRef = useRef<NodeJS.Timeout>();
+
+  const handleMouseEnter = () => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    setIsExploreOpen(true);
+  };
+
+  const handleMouseLeave = () => {
+    timeoutRef.current = setTimeout(() => {
+      setIsExploreOpen(false);
+    }, 300); // 300ms delay before closing
+  };
 
   return (
     <nav className="fixed top-0 w-full bg-white shadow-sm z-50">
@@ -51,8 +65,8 @@ export default function Navbar() {
             <div className="relative">
               <button
                 className="flex items-center text-gray-700 hover:text-emerald-600 focus:outline-none"
-                onMouseEnter={() => setIsExploreOpen(true)}
-                onMouseLeave={() => setIsExploreOpen(false)}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
               >
                 <span>Explore</span>
                 <ChevronDown className="w-4 h-4 ml-1" />
@@ -60,8 +74,8 @@ export default function Navbar() {
               {isExploreOpen && (
                 <NavDropdown
                   items={exploreItems}
-                  onMouseEnter={() => setIsExploreOpen(true)}
-                  onMouseLeave={() => setIsExploreOpen(false)}
+                  onMouseEnter={handleMouseEnter}
+                  onMouseLeave={handleMouseLeave}
                 />
               )}
             </div>
