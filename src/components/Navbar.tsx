@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Menu, Search, User, Bell, ChevronDown, MapPin, TrendingUp, Grid } from 'lucide-react';
 import NavDropdown from './NavDropdown';
 
@@ -40,9 +41,9 @@ export default function Navbar() {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex items-center">
-            <span className="text-2xl font-bold bg-gradient-to-r from-emerald-600 to-emerald-500 bg-clip-text text-transparent">
+            <Link to="/" className="text-2xl font-bold bg-gradient-to-r from-emerald-600 to-emerald-500 bg-clip-text text-transparent">
               ShareIt
-            </span>
+            </Link>
           </div>
 
           {/* Desktop Navigation */}
@@ -64,12 +65,12 @@ export default function Navbar() {
                 />
               )}
             </div>
-            <a href="#how-it-works" className="text-gray-700 hover:text-emerald-600">
+            <Link to="/how-it-works" className="text-gray-700 hover:text-emerald-600">
               How it Works
-            </a>
-            <a href="#community" className="text-gray-700 hover:text-emerald-600">
+            </Link>
+            <Link to="/community" className="text-gray-700 hover:text-emerald-600">
               Community
-            </a>
+            </Link>
           </div>
 
           {/* Right Side Icons */}
@@ -97,24 +98,24 @@ export default function Navbar() {
       {isMobileMenuOpen && (
         <div className="md:hidden bg-white border-t">
           <div className="px-4 pt-2 pb-3 space-y-1">
-            <a
-              href="#explore"
+            <Link
+              to="/explore"
               className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-emerald-600 hover:bg-gray-50"
             >
               Explore
-            </a>
-            <a
-              href="#how-it-works"
+            </Link>
+            <Link
+              to="/how-it-works"
               className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-emerald-600 hover:bg-gray-50"
             >
               How it Works
-            </a>
-            <a
-              href="#community"
+            </Link>
+            <Link
+              to="/community"
               className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-emerald-600 hover:bg-gray-50"
             >
               Community
-            </a>
+            </Link>
           </div>
         </div>
       )}
